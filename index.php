@@ -21,6 +21,17 @@ if (isset($_POST['enviar_nota'])) {
     echo "<script>alert('Hubo un error al guardar la nota: " . $conexion->error . "');</script>";
   }
 }
+
+if (isset($_GET['eliminar'])) {
+  $id_eliminar = (int)$_GET['eliminar'];
+
+  $sql_eliminar = "DELETE FROM notas WHERE ID_NOTAS = $id_eliminar";
+
+  if ($conexion->query($sql_eliminar) === TRUE) {
+    header("Location: index.php#comentarios");
+    exit();
+  }
+}
 ?>
 
 <!doctype html>
@@ -162,6 +173,10 @@ if (isset($_POST['enviar_nota'])) {
             echo '    <small>' . htmlspecialchars($fila['FECHA_NOTA']) . '</small>';
             echo '  </div>';
             echo '  <p>' . nl2br(htmlspecialchars($fila['NOTA'])) . '</p>';
+            echo '  <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">';
+            echo '    <a href="index.php?eliminar=' . $fila['ID_NOTAS'] . '" onclick="return confirm(\'¿Seguro que deseas eliminar esta nota?\')" style="color: #ff3e3e; text-decoration: none; font-size: 0.9rem; margin-right: 15px;">🗑️ Eliminar</a>';
+            echo '    <a href="editar.php?id=' . $fila['ID_NOTAS'] . '" style="color: #4CAF50; text-decoration: none; font-size: 0.9rem;">✏️ Editar</a>';
+            echo '  </div>';
             echo '</div>';
           }
         } else {
